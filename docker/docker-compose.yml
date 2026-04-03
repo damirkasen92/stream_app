@@ -1,0 +1,83 @@
+services:
+  api:
+    build:
+      context: ..
+      target: prod
+      dockerfile: ./docker/backend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+      - "3000:3000"
+    volumes:
+#      - ../api:/usr/src
+#      - ./backend/Caddyfile:/usr/src/Caddyfile
+      - hls_data:/usr/src/public/hls
+      - caddy_data:/data
+      - caddy_config:/config
+#    entrypoint: ["/usr/src/entrypoint.sh"]
+    networks:
+      - all
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - all
+
+  queue:
+    build:
+      context: ..
+      target: worker
+      dockerfile: ./docker/backend/Dockerfile
+#    volumes:
+#      - ../api:/usr/src
+    depends_on:
+      - db
+    networks:
+      - all
+
+  migrate:
+    build:
+      context: ..
+      target: migrate
+      dockerfile: ./docker/backend/Dockerfile
+    restart: no
+#    volumes:
+#      - ../api:/usr/src
+    depends_on:
+      - db
+    networks:
+      - all
+
+  rtmp:
+    build:
+      context: ..
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "1935:1935"
+      - "8080:8080"
+    volumes:
+      - hls_data:/var/www/public/hls
+    networks:
+      - all
+
+networks:
+  all:
+    driver: bridge
+
+volumes:
+  db_data:
+  hls_data:
+  caddy_data:
+  caddy_config:

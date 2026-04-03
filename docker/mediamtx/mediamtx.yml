@@ -1,0 +1,51 @@
+logLevel: info
+logDestinations: [ stdout ]
+
+api: true
+apiAddress: :9997
+apiEncryption: false
+
+authMethod: internal
+
+authInternalUsers:
+  - user: any
+    pass:
+    ips: []
+    permissions:
+      - action: publish
+      - action: read
+
+  - user: admin
+    pass: secret
+    ips: []
+    permissions:
+      - action: api
+      - action: metrics
+      - action: pprof
+
+rtmp: true
+rtmpAddress: :1935
+
+hls: true
+hlsAddress: :8888
+hlsVariant: mpegts
+hlsSegmentDuration: 2s
+hlsSegmentCount: 6
+
+webrtc: false
+
+pathDefaults:
+  source: publisher
+  overridePublisher: true
+
+paths:
+  "~^live/([A-Za-z0-9]+)$":
+    runOnReady: /scripts/onready.sh
+    runOnReadyRestart: no
+    runOnNotReady: /scripts/onnotready.sh
+
+  "~^live480p/([A-Za-z0-9]+)$":
+    source: publisher
+
+  "~^live720p/([A-Za-z0-9]+)$":
+    source: publisher

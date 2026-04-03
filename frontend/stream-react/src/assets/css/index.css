@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+    themes: "light", "dark";
+    root: "#root";
+    /*include: navbar;*/
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: "Roboto Light", sans-serif;
+}
+
+#root {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}

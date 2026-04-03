@@ -1,0 +1,38 @@
+FROM dunglas/frankenphp AS base
+
+WORKDIR /usr/src
+
+RUN apt-get update && apt-get install -y \
+    supervisor ffmpeg unzip libpq-dev \
+    && install-php-extensions pdo pdo_mysql mbstring zip exif pcntl bcmath gd intl \
+    && apt-get clean
+
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
+
+FROM base AS dev
+
+RUN mkdir -p /var/log/ffmpeg /var/log/supervisor
+
+COPY ./docker/backend/server.conf /etc/supervisor/conf.d/server.conf
+COPY ./docker/backend/worker.conf /etc/supervisor/conf.d/worker.conf
+
+COPY ./docker/backend/wait-for-it.sh /usr/local/bin/wait-for-it.sh
+RUN chmod +x /usr/local/bin/wait-for-it.sh
+
+#CMD ["wait-for-it.sh", "db:3306", "--", "supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["sh", "-c", "wait-for-it.sh db:3306 --timeout=30 && wait-for-it.sh redis:6379 --timeout=30 && exec supervisord -n -c /etc/supervisor/supervisord.conf"]
+
+#FROM base AS worker
+
+#COPY ./docker/backend/worker.conf /etc/supervisor/conf.d/worker.conf
+
+#CMD ["supervisord", "-n", "-c", "/etc/supervisor/conf.d/worker.conf"]
+
+FROM base AS migrate
+
+COPY ./docker/backend/wait-for-it.sh /usr/local/bin/wait-for-it.sh
+RUN chmod +x /usr/local/bin/wait-for-it.sh
+
+CMD ["wait-for-it.sh", "db:3306", "--", "php", "artisan", "migrate", "--force"]

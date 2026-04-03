@@ -1,0 +1,41 @@
+{
+	frankenphp
+}
+
+:8000 {
+	root * /usr/src/public/
+	encode zstd br gzip
+
+	php_server {
+		try_files {path} index.php
+	}
+
+	handle_path /hls/* {
+        root * /usr/src/public/hls
+        file_server
+    }
+
+    # @http {
+        # protocol http
+    # }
+    # redir @http https://{host}{uri}
+
+    # @static {
+        # path *.css *.js *.jpg *.jpeg *.png *.gif *.svg *.ico
+    # }
+    # header @static Cache-Control "public, max-age=31536000, immutable"
+}
+
+:3000 {
+    mercure {
+        publish_url /hub
+
+        publisher_jwt 4f8c2d9a7b1e3f6a9c8d4e2f7b0a1c9d4f8c2d9a7b1e3f6a9c8d4e2f7b0a1c9d
+        subscriber_jwt 4f8c2d9a7b1e3f6a9c8d4e2f7b0a1c9d4f8c2d9a7b1e3f6a9c8d4e2f7b0a1c9d
+
+        jwt_algorithm HS256
+
+        allow_anonymous
+        cors_origins http://localhost:9000 http://127.0.0.1:5173
+    }
+}
