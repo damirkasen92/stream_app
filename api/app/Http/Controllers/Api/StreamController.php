@@ -100,7 +100,7 @@ class StreamController extends Controller
         $stream = StartStream::execute($streamKey);
 
         CreateVodJob::dispatch(
-            VodData::make($request->user()->id, $stream, $request)
+            VodData::make($stream, $request)
         );
 
         return response()->json([]);

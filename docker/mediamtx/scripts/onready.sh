@@ -10,7 +10,7 @@ code=$(curl -s -o /dev/null -w "%{http_code}" \
     \"conn_id\":\"$MTX_SOURCE_ID\",
     \"vod_paths\": [\"/recordings/${G1}/${DATE}_480p/index.m3u8\", \"/recordings/${G1}/${DATE}_720p/index.m3u8\"],
     \"qualities\": [\"480p\", \"720p\"],
-    \"recorded_at\": \"$(date ${DATE})\"
+    \"recorded_at\": \"${DATE}\"
   }")
 
 echo "App API returned $code"
@@ -21,7 +21,8 @@ if [ "$code" -ne 200 ]; then
   exit 1
 fi
 
-mkdir -p /recordings/${G1}/${DATE}
+mkdir -p /recordings/${G1}/${DATE}_480p
+mkdir -p /recordings/${G1}/${DATE}_720p
 
 ffmpeg -i rtmp://localhost:1935/$MTX_PATH \
   -c:v libx264 -b:v 1200k -s 854x480 -c:a aac -b:a 128k \

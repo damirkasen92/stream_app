@@ -24,7 +24,6 @@ class StartStream
         }
 
         $stream = self::getStream($user->id);
-
         $stream->update([
             'started_at' => now(),
         ]);
@@ -48,14 +47,12 @@ class StartStream
             ->orderBy('id', 'desc')
             ->first();
 
-        \Illuminate\Log\log($stream);
-
         if (!$stream) {
             throw new StreamException("Invalid stream");
         }
 
         if ($stream->status !== StreamStatuses::live) {
-            throw new StreamException("There is no any live stream");
+            throw new StreamException("There is no an any live stream");
         }
 
         return $stream;
