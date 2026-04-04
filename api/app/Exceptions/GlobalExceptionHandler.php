@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,6 +24,12 @@ class GlobalExceptionHandler
                 'message' => 'Validation Error',
                 'errors' => $e->errors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        });
+
+        $exceptions->render(function (AuthenticationException $e): JsonResponse {
+            return response()->json([
+                'message' => 'Authentication Error',
+            ], Response::HTTP_UNAUTHORIZED);
         });
 
         $exceptions->render(function (\Throwable $e, Request $request): ?JsonResponse {

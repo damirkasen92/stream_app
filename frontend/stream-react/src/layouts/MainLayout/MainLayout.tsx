@@ -9,7 +9,7 @@ export default function MainLayout() {
     return (
         <>
             <Header />
-            <div className={"container mx-auto"}>
+            <div className={"container mx-auto mt-3 px-3"}>
                 <motion.main
                     key={location.pathname}
                     initial={{opacity: 0, y: 20}}

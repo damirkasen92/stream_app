@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
 
+
+// refactor
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -50,7 +52,7 @@ class AuthController extends Controller
         $refreshCookie = Cookie::make(
             'refresh_token',
             $tokens->refresh_token,
-            now()->addDays(7),
+            now()->addDays(7)->getTimestamp(),
             '/',
             null,
             false,
@@ -80,7 +82,7 @@ class AuthController extends Controller
         $refreshCookie = Cookie::make(
             'refresh_token',
             $tokens->refresh_token,
-            now()->addDays(7),
+            now()->addDays(7)->getTimestamp(),
             '/',
             null,
             false,

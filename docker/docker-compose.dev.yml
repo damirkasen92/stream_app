@@ -46,18 +46,18 @@ services:
 #    networks:
 #      - all
 
-#  migrate:
-#    build:
-#      context: ..
-#      target: migrate
-#      dockerfile: ./docker/backend/Dockerfile.dev
-#    restart: no
-#    volumes:
-#      - ../api:/usr/src
-#    depends_on:
-#      - db
-#    networks:
-#      - all
+  migrate:
+    build:
+      context: ..
+      target: migrate
+      dockerfile: ./docker/backend/Dockerfile.dev
+    restart: no
+    volumes:
+      - ../api:/usr/src
+    depends_on:
+      - db
+    networks:
+      - all
 
   mediamtx:
 #    image: bluenviron/mediamtx:latest-ffmpeg

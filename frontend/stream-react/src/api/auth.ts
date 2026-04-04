@@ -1,19 +1,24 @@
 import api from "./axiosConfig.ts";
 import {useAuthStore} from "../store/authStore";
+import type {AxiosResponse} from "axios";
 
-export async function login(data: {email: string, password: string}) {
-    const res = await api.post("/auth/login", data);
+const setAuthToken = (res: AxiosResponse) => {
     useAuthStore.getState().setToken(res.data.access_token, res.data.expires_in);
 }
 
-export async function register(data: {name: string, email: string; password: string}) {
+export async function login(data: Record<string, string>) {
+    const res = await api.post("/auth/login", data);
+    setAuthToken(res);
+}
+
+export async function register(data: Record<string, string>) {
     const res = await api.post("/auth/register", data);
-    useAuthStore.getState().setToken(res.data.access_token, res.data.expires_in);
+    setAuthToken(res);
 }
 
 export async function refresh() {
     const res = await api.post("/auth/refresh", {});
-    useAuthStore.getState().setToken(res.data.access_token, res.data.expires_in);
+    setAuthToken(res);
 }
 
 export async function logout() {

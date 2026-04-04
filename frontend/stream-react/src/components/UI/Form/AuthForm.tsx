@@ -19,8 +19,12 @@ export default function AuthForm({fields, onSubmit, buttonLabel}: AuthFormProps)
 
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         setErrors([]);
-        onSubmit(data).catch((errs: Record<string, string[]>) => {
+
+        onSubmit(data).then(() => {
+
+        }).catch((errs: Record<string, string[]>) => {
             const allErrors = Object.values(errs).flat();
             setErrors(allErrors);
         });
