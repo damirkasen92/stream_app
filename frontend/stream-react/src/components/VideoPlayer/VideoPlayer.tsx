@@ -1,7 +1,7 @@
 import {useEffect, useRef} from "react";
 import Hls from "hls.js";
 
-const VideoPlayer = ({streamUrl}: {streamUrl: string}) => {
+export default function VideoPlayer({streamUrl}: {streamUrl: string}) {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
@@ -17,6 +17,4 @@ const VideoPlayer = ({streamUrl}: {streamUrl: string}) => {
     }, [streamUrl]);
 
     return <video ref={videoRef} controls autoPlay className={"w-full aspect-video"} />;
-};
-
-export default VideoPlayer;
+}

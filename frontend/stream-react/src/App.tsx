@@ -1,11 +1,11 @@
-import MainLayout from "./layouts/MainLayout/MainLayout.tsx";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage.tsx";
-import LoginPage from "./pages/LoginPage/LoginPage.tsx";
-import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
-import ProtectedRoute from "./routes/ProtectedRoute.tsx";
-import {useIsAuth} from "./store/authStore.ts";
-import CreateStreamPage from "./pages/CreateStreamPage/CreateStreamPage.tsx";
+import MainLayout from "@/layouts/MainLayout/MainLayout.tsx";
+import HomePage from "@pages/HomePage/HomePage.tsx";
+import LoginPage from "@pages/LoginPage/LoginPage.tsx";
+import RegisterPage from "@pages/RegisterPage/RegisterPage.tsx";
+import ProtectedRoute from "@/routes/ProtectedRoute.tsx";
+import {useIsAuth} from "@/store/authStore.ts";
+import CreateStreamPage from "@/pages/CreateStreamPage/CreateStreamPage.tsx";
 
 export default function App() {
     return (

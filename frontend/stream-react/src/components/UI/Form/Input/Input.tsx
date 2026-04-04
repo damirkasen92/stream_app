@@ -1,4 +1,4 @@
-import type {InputProps} from "../../../../types/InputProps.ts";
+import type {InputProps} from "@/types/InputProps.ts";
 import InputBase from "./Inputs/Texts/InputBase.tsx";
 import * as React from "react";
 

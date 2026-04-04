@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
-import {useIsAuth} from "../../store/authStore.ts";
-import {logout} from "../../api/auth.ts";
+import {useIsAuth} from "@store/authStore.ts";
+import {logout} from "@/api/auth.ts";
 
 export default function Navbar() {
     return (

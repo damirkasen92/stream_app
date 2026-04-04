@@ -1,6 +1,6 @@
 import {useState} from "react";
 import Input from "./Input/Input.tsx";
-import Errors from "../Errors/Errors.tsx";
+import Errors from "@components/UI/Errors/Errors.tsx";
 import * as React from "react";
 
 type AuthFormProps = {

@@ -1,4 +1,4 @@
-import CreateStream from "../../components/CreateStream/CreateStream.tsx";
+import CreateStream from "@components/CreateStream/CreateStream.tsx";
 
 export default function CreateStreamPage() {
     return (

@@ -1,8 +1,8 @@
 import * as React from "react";
-import Errors from "../UI/Errors/Errors.tsx";
 import {useState} from "react";
-import Input from "../UI/Form/Input/Input.tsx";
-import {createStream} from "../../api/stream.ts";
+import Errors from "@components/UI/Errors/Errors.tsx";
+import Input from "@components/UI/Form/Input/Input.tsx";
+import {createStream} from "@/api/stream.ts";
 
 export default function CreateStream() {
     const [data, setData] = useState<Record<string, string>>({
