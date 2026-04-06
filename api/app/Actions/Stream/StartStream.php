@@ -53,6 +53,8 @@ class StartStream
     /**
      * @throws StreamException
      */
+
+    // I will extract it to scopes
     private static function getLiveStream(int $userId): Stream
     {
         $stream = Stream::where([

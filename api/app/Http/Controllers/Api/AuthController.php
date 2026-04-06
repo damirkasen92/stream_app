@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Actions\Auth\AuthUser;
 use App\Actions\Auth\CreateUser;
 use App\Actions\Auth\LogoutUser;
-use App\Actions\Token\IssueToken;
+use App\Actions\Token\IssueTokens;
+use App\Actions\Token\MakeRefreshTokenCookie;
 use App\Actions\Token\ValidateToken;
 use App\Data\Auth\UserLoginData;
 use App\Data\Auth\UserRegistrationData;
@@ -23,24 +24,13 @@ class AuthController extends Controller
     {
         $data = UserRegistrationData::from($request);
         $user = CreateUser::execute($data);
-        $tokens = IssueToken::execute($user);
-        $refreshCookie = Cookie::make(
-            'refresh_token',
-            $tokens->refresh_token,
-            now()->addDays(7)->getTimestamp(),
-            '/',
-            null,
-            false,
-            true,
-            false,
-            'Strict'
-        );
+        $tokens = IssueTokens::execute($user);
 
         return response()->json([
             'access_token' => $tokens->access_token,
             'expires_in' => $tokens->expires_in,
         ], Response::HTTP_CREATED)->cookie(
-            $refreshCookie
+            MakeRefreshTokenCookie::execute($tokens)
         );
     }
 
@@ -48,23 +38,12 @@ class AuthController extends Controller
     {
         $dto = UserLoginData::from($request);
         $user = AuthUser::execute($dto);
-        $tokens = IssueToken::execute($user);
-        $refreshCookie = Cookie::make(
-            'refresh_token',
-            $tokens->refresh_token,
-            now()->addDays(7)->getTimestamp(),
-            '/',
-            null,
-            false,
-            true,
-            false,
-            'Strict'
-        );
+        $tokens = IssueTokens::execute($user);
 
         return response()->json([
             'access_token' => $tokens->access_token,
             'expires_in' => $tokens->expires_in,
-        ])->cookie($refreshCookie);
+        ])->cookie(MakeRefreshTokenCookie::execute($tokens));
     }
 
     public function refresh(Request $request)
@@ -78,23 +57,12 @@ class AuthController extends Controller
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $tokens = IssueToken::execute($user);
-        $refreshCookie = Cookie::make(
-            'refresh_token',
-            $tokens->refresh_token,
-            now()->addDays(7)->getTimestamp(),
-            '/',
-            null,
-            false,
-            true,
-            false,
-            'Strict'
-        );
+        $tokens = IssueTokens::execute($user);
 
         return response()->json([
             'access_token' => $tokens->access_token,
             'expires_in' => $tokens->expires_in,
-        ])->cookie($refreshCookie);
+        ])->cookie(MakeRefreshTokenCookie::execute($tokens));
     }
 
     public function logout(Request $request)

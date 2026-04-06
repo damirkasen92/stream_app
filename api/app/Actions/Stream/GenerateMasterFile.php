@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Stream;
+namespace App\Actions\Stream;
 
 class GenerateMasterFile
 {

@@ -30,16 +30,4 @@ class StartStreamData extends Data
             'recorded_at' => $request->input('recorded_at')
         ]);
     }
-
-//    public static function make(Stream $stream, Request $request): self
-//    {
-//        return self::validateAndCreate([
-//            'user_id' => $stream->user_id,
-//            'stream_id' => $stream->id,
-//            'title' => $stream->title,
-//            'vod_paths' => $request->input('vod_paths'),
-//            'qualities' => $request->input('qualities'),
-//            'recorded_at' => $request->input('recorded_at')
-//        ]);
-//    }
 }
