@@ -3,6 +3,7 @@ import {useState} from "react";
 import Errors from "@components/UI/Errors/Errors.tsx";
 import Input from "@components/UI/Form/Input/Input.tsx";
 import {createStream} from "@/api/stream.ts";
+import {useNavigate} from "react-router-dom";
 
 export default function CreateStream() {
     const [data, setData] = useState<Record<string, string>>({
@@ -10,6 +11,7 @@ export default function CreateStream() {
         description: "",
     });
     const [errors, setErrors] = useState<string[]>([]);
+    const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setData({...data, [e.target.name]: e.target.value});
@@ -20,16 +22,18 @@ export default function CreateStream() {
 
         setErrors([]);
 
-        createStream(data).catch((errs: Record<string, string[]>) => {
-            const allErrors = Object.values(errs).flat();
-            setErrors(allErrors);
-        });
+        createStream(data)
+            .then((stream) => {
+                console.log(stream.data.user_id);
+                navigate(`/stream/${stream.data.user_id}/preview`, {replace: true});
+            })
+            .catch((errs: Record<string, string[]>) => {
+                const allErrors = Object.values(errs).flat();
+                setErrors(allErrors);
+            });
     };
 
-    const fields = [
-        "title",
-        "description",
-    ]
+    const fields = ["title", "description"];
 
     return (
         <div className="mx-auto my-auto max-w-[335px] w-full">

@@ -13,7 +13,7 @@ class GlobalExceptionHandler
 {
     public static function handler(Exceptions $exceptions): void
     {
-        $exceptions->render(function (StreamException $e, Request $request): JsonResponse {
+        $exceptions->render(function (StreamException $e): JsonResponse {
             return response()->json([
                 'error' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);

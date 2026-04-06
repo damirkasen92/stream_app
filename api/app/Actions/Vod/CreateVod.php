@@ -2,21 +2,22 @@
 
 namespace App\Actions\Vod;
 
-use App\Data\Vod\VodData;
+use App\Data\Stream\StartStreamData;
+use App\Models\Stream;
 use App\Models\Vod;
 
 class CreateVod
 {
-    public static function execute(VodData $dto): void
+    public static function execute(StartStreamData $data, Stream $stream): void
     {
-        foreach ($dto->vod_paths as $index => $path) {
+        foreach ($data->vod_paths as $index => $path) {
             Vod::create([
-                'user_id' => $dto->user_id,
-                'stream_id' => $dto->stream_id,
-                'title' => $dto->title,
+                'user_id' => $stream->user_id,
+                'stream_id' => $stream->id,
+                'title' => $stream->title,
                 'path' => $path,
-                'quality' => $dto->qualities[$index],
-                'recorded_at' => $dto->recorded_at ?? now(),
+                'quality' => $data->qualities[$index],
+                'recorded_at' => $data->recorded_at,
             ]);
         }
     }

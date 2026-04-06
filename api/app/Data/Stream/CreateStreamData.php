@@ -10,7 +10,7 @@ use Spatie\LaravelData\Attributes\Validation\Unique;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 
-class StreamData extends Data
+class CreateStreamData extends Data
 {
     public function __construct(
         #[Required]

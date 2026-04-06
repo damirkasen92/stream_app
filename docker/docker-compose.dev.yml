@@ -10,7 +10,8 @@ services:
     volumes:
       - ../api:/usr/src
       - ./backend/Caddyfile:/usr/src/Caddyfile
-      - hls_data:/usr/src/public/hls
+#      - hls_data:/usr/src/public/hls
+      - recordings:/usr/src/public/recordings
       - caddy_data:/data
       - caddy_config:/config
     networks:
@@ -66,11 +67,11 @@ services:
       dockerfile: ./docker/mediamtx/Dockerfile
     ports:
       - "1935:1935"
-      - "8888:8888"
-      - "9997:9997"
+#      - "8888:8888"
+#      - "9997:9997" // only local using
     volumes:
       - ./mediamtx/mediamtx.yml:/mediamtx.yml
-      - hls_data:/hls
+#      - hls_data:/data/hls
       - recordings:/recordings
     networks:
       - all
@@ -91,7 +92,7 @@ networks:
 
 volumes:
   db_data:
-  hls_data:
+#  hls_data:
   caddy_data:
   caddy_config:
   recordings:

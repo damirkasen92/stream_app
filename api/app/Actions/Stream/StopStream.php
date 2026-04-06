@@ -5,6 +5,7 @@ namespace App\Actions\Stream;
 use App\Enums\StreamStatuses;
 use App\Models\Stream;
 use App\Models\User;
+use Illuminate\Support\Facades\Redis;
 
 class StopStream
 {
@@ -21,5 +22,7 @@ class StopStream
                 'status' => StreamStatuses::ended,
                 'ended_at' => now()
             ]);
+
+        Redis::del("stream:{$userId}");
     }
 }

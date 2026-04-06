@@ -16,5 +16,5 @@ export default function VideoPlayer({streamUrl}: {streamUrl: string}) {
         }
     }, [streamUrl]);
 
-    return <video ref={videoRef} controls autoPlay className={"w-full aspect-video"} />;
+    return <video ref={videoRef} controls autoPlay muted className={"w-full aspect-video"} />;
 }

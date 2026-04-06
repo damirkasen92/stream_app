@@ -2,7 +2,7 @@
 
 namespace App\Actions\Stream;
 
-use App\Data\Stream\StreamData;
+use App\Data\Stream\CreateStreamData;
 use App\Enums\StreamStatuses;
 use App\Exceptions\StreamException;
 use App\Models\Stream;
@@ -13,7 +13,7 @@ class CreateStream
     /**
      * @throws StreamException
      */
-    public static function execute(StreamData $data): Stream {
+    public static function execute(CreateStreamData $data): Stream {
         $liveStream = Stream::where([
             'user_id' => $data->user_id,
             'status' => StreamStatuses::live,

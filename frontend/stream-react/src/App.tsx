@@ -6,6 +6,7 @@ import RegisterPage from "@pages/RegisterPage/RegisterPage.tsx";
 import ProtectedRoute from "@/routes/ProtectedRoute.tsx";
 import {useIsAuth} from "@/store/authStore.ts";
 import CreateStreamPage from "@/pages/CreateStreamPage/CreateStreamPage.tsx";
+import StreamPreview from "@components/StreamPreview/StreamPreview.tsx";
 
 export default function App() {
     return (
@@ -20,6 +21,7 @@ export default function App() {
                     <Route element={<ProtectedRoute />}>
                         <Route path="/stream">
                             <Route path="/stream/create" element={<CreateStreamPage />} />
+                            <Route path="/stream/:id/preview" element={<StreamPreview />} />
 
                             {/*  watch stream page here  */}
                         </Route>

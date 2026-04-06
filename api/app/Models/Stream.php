@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\StreamStatuses;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Stream extends Model
 {
@@ -27,6 +29,13 @@ class Stream extends Model
         'ended_at' => 'datetime',
         'status' => StreamStatuses::class,
     ];
+
+    protected function startedAt(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => Carbon::createFromFormat('Y-m-d_H-i-s', $value)->toDateTimeString(),
+        );
+    }
 
     public function user(): BelongsTo
     {

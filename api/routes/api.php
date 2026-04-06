@@ -15,7 +15,6 @@ Route::prefix('/auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/refresh', [AuthController::class, 'refresh'])
         ->name('auth.refresh');
-        //->middleware('refresh.rotator');
     Route::post('/logout', [AuthController::class, 'logout'])
         ->middleware('auth:sanctum');
 });
@@ -23,10 +22,11 @@ Route::prefix('/auth')->group(function () {
 Route::prefix('/streams')->group(function () {
     Route::post('/start', [StreamController::class, 'start']);
     Route::post('/stop', [StreamController::class, 'stop']);
+    Route::get('/info', [StreamController::class, 'info']);
 
-    Route::get('/{stream}/master.m3u8', [StreamController::class, 'master']);
-    Route::get('/{alias}/{quality}/main_stream.m3u8', [StreamController::class, 'serve']);
-    Route::get('/{alias}/{quality}/{file}', [StreamController::class, 'serve']);
+    Route::get('/{userId}/master.m3u8', [StreamController::class, 'master']);
+    Route::get('/{userId}/{quality}/index.m3u8', [StreamController::class, 'serve']);
+    Route::get('/{userId}/{quality}/{segment}', [StreamController::class, 'serve']);
 
     Route::middleware('auth:sanctum')->group(function () {
 //        Route::get('/{alias}', [StreamController::class, 'getLiveStream']);
