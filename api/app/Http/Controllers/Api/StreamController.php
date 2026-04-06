@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Stream\CreateStream;
+use App\Actions\Stream\GenerateMasterFile;
 use App\Actions\Stream\StartStream;
 use App\Actions\Stream\StopStream;
 use App\Data\Stream\CreateStreamData;
@@ -31,45 +32,27 @@ class StreamController extends Controller
 
     public function master(int $userId)
     {
-        $variants = [
-            [
-                'bandwidth' => 1200000,
-                'resolution' => '854x480',
-                'url' => url('/api/streams/' . $userId . '/480p/index.m3u8'),
-            ],
-            [
-                'bandwidth' => 2500000,
-                'resolution' => '1280x720',
-                'url' => url('/api/streams/' . $userId . '/720p/index.m3u8'),
-            ],
-        ];
-
-        $lines = ["#EXTM3U"];
-        foreach ($variants as $v) {
-            $lines[] = "#EXT-X-STREAM-INF:BANDWIDTH={$v['bandwidth']},RESOLUTION={$v['resolution']}";
-            $lines[] = $v['url'];
-        }
-
-        return response(implode("\n", $lines), Response::HTTP_OK)
+        return response(GenerateMasterFile::execute($userId), Response::HTTP_OK)
             ->header('Content-Type', 'application/vnd.apple.mpegurl')
             ->header('Cache-Control', 'no-cache');
     }
 
-    public function serve($userId, $quality, $segment = null)
+    public function serve(int $userId, string $quality, ?string $segment = null)
     {
         $stream = Redis::hgetall("stream:{$userId}");
         $realKey = $stream['stream_key'];
         $date = $stream['started_at'];
+        $basePath = "/recordings/{$realKey}/{$date}_{$quality}";
 
-        if (!$realKey) abort(404);
+        if (!$realKey) abort(Response::HTTP_NOT_FOUND);
 
         if ($segment === null) {
-            $path = public_path("/recordings/{$realKey}/{$date}_{$quality}/index.m3u8");
+            $path = public_path("$basePath/index.m3u8");
         } else {
-            $path = public_path("/recordings/{$realKey}/{$date}_{$quality}/{$segment}");
+            $path = public_path("$basePath/{$segment}");
         }
 
-        if (!file_exists($path)) abort(404);
+        if (!file_exists($path)) abort(Response::HTTP_NOT_FOUND);
 
         return new StreamedResponse(function () use ($path) {
             $handle = fopen($path, 'rb');
@@ -104,6 +87,7 @@ class StreamController extends Controller
     {
         $data = StartStreamData::fromRequest($request);
         $stream = StartStream::execute($data);
+
         CreateVodJob::dispatch(
             $data,
             $stream
@@ -126,7 +110,7 @@ class StreamController extends Controller
         $streamKey = $request->query('stream');
 
         if ($streamKey === null) {
-            abort(404);
+            abort(Response::HTTP_NOT_FOUND);
         }
 
         $userId = User::where('stream_key', $streamKey)->firstOrFail()->value('id');
