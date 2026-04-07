@@ -6,6 +6,7 @@ interface AuthState {
     expiresIn: number | null;
     setToken: (token: string, expiresIn: number) => void;
     clearToken: () => void;
+    isLoggedOut: boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -13,8 +14,9 @@ export const useAuthStore = create<AuthState>()(
         (set) => ({
             accessToken: null,
             expiresIn: null,
-            setToken: (token, expiresIn) => set({accessToken: token, expiresIn}),
-            clearToken: () => set({accessToken: null, expiresIn: null}),
+            setToken: (token, expiresIn) => set({accessToken: token, expiresIn, isLoggedOut: false}),
+            clearToken: () => set({accessToken: null, expiresIn: null, isLoggedOut: true}),
+            isLoggedOut: false,
         }),
         {
             name: "auth",
@@ -22,6 +24,3 @@ export const useAuthStore = create<AuthState>()(
         }
     )
 );
-
-// export const isAuth: boolean = !!useAuthStore.getState().accessToken;
-export const useIsAuth = () => useAuthStore((state) => !!state.accessToken);

@@ -22,6 +22,6 @@ export async function refresh() {
 }
 
 export async function logout() {
-    await api.post("/auth/logout");
     useAuthStore.getState().clearToken();
+    await api.post("/auth/logout");
 }
