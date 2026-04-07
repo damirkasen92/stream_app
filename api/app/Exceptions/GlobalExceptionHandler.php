@@ -32,7 +32,13 @@ class GlobalExceptionHandler
             ], Response::HTTP_UNAUTHORIZED);
         });
 
-        $exceptions->render(function (\Throwable $e, Request $request): ?JsonResponse {
+        $exceptions->render(function (\Throwable $e): ?JsonResponse {
+            if (app()->isProduction()) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
             return response()->json([
                 'message' => $e->getMessage(),
                 'type' => class_basename($e),

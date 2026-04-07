@@ -11,13 +11,9 @@ use App\Actions\Token\ValidateToken;
 use App\Data\Auth\UserLoginData;
 use App\Data\Auth\UserRegistrationData;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cookie;
 
-
-// refactor
 class AuthController extends Controller
 {
     public function register(Request $request)

@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -36,6 +37,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'stream_key',
     ];
 
     /**
@@ -56,5 +58,10 @@ class User extends Authenticatable
         static::creating(function (User $user) {
             $user->stream_key = Str::random(32);
         });
+    }
+
+    public function streams(): HasMany
+    {
+        return $this->hasMany(Stream::class);
     }
 }

@@ -6,16 +6,17 @@ class GenerateMasterFile
 {
     public static function execute(int $userId): string
     {
+        $baseUrl = '/api/streams/' . $userId;
         $variants = [
             [
                 'bandwidth' => 1200000,
                 'resolution' => '854x480',
-                'url' => url('/api/streams/' . $userId . '/480p/index.m3u8'),
+                'url' => url($baseUrl . '/480p/index.m3u8'),
             ],
             [
                 'bandwidth' => 2500000,
                 'resolution' => '1280x720',
-                'url' => url('/api/streams/' . $userId . '/720p/index.m3u8'),
+                'url' => url($baseUrl . '/720p/index.m3u8'),
             ],
         ];
 

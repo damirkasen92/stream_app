@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StreamStatuses;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,5 +46,13 @@ class Stream extends Model
     public function vods(): HasMany
     {
         return $this->hasMany(Vod::class);
+    }
+
+    public function scopeLiveByUser(Builder $query, int $userId): Builder
+    {
+        return $query->where([
+            'user_id' => $userId,
+            'status' => StreamStatuses::live,
+        ])->orderBy('id', 'desc');
     }
 }

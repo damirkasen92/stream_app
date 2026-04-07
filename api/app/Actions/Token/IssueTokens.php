@@ -5,7 +5,6 @@ namespace App\Actions\Token;
 use App\Data\Token\TokenResponseData;
 use App\Models\User;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cookie;
 
 class IssueTokens
 {

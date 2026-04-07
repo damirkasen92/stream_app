@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Shared\GetPathType;
 use App\Actions\Stream\CreateStream;
 use App\Actions\Stream\GenerateMasterFile;
+use App\Actions\Stream\GenerateStreamPath;
 use App\Actions\Stream\StartStream;
 use App\Actions\Stream\StopStream;
 use App\Data\Stream\CreateStreamData;
@@ -16,8 +18,6 @@ use App\Models\Stream;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -26,7 +26,7 @@ class StreamController extends Controller
     public function index()
     {
         return Stream::with('user')
-            ->where('streams.status', StreamStatuses::live)
+            ->where('status', StreamStatuses::live)
             ->get();
     }
 
@@ -39,27 +39,15 @@ class StreamController extends Controller
 
     public function serve(int $userId, string $quality, ?string $segment = null)
     {
-        $stream = Redis::hgetall("stream:{$userId}");
-        $realKey = $stream['stream_key'];
-        $date = $stream['started_at'];
-        $basePath = "/recordings/{$realKey}/{$date}_{$quality}";
-
-        if (!$realKey) abort(Response::HTTP_NOT_FOUND);
-
-        if ($segment === null) {
-            $path = public_path("$basePath/index.m3u8");
-        } else {
-            $path = public_path("$basePath/{$segment}");
-        }
-
-        if (!file_exists($path)) abort(Response::HTTP_NOT_FOUND);
+        $path = GenerateStreamPath::execute($userId, $quality, $segment);
+        $type = GetPathType::execute($path);
 
         return new StreamedResponse(function () use ($path) {
             $handle = fopen($path, 'rb');
             fpassthru($handle);
             fclose($handle);
         }, Response::HTTP_OK, [
-            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Type' => $type,
             'Cache-Control' => 'no-cache'
         ]);
     }

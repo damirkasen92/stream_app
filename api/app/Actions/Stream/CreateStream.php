@@ -6,7 +6,6 @@ use App\Data\Stream\CreateStreamData;
 use App\Enums\StreamStatuses;
 use App\Exceptions\StreamException;
 use App\Models\Stream;
-use Illuminate\Support\Facades\Auth;
 
 class CreateStream
 {
