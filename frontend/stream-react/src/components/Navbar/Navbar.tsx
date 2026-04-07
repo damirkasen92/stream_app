@@ -1,11 +1,19 @@
 import {Link} from "react-router-dom";
-import {useIsAuth} from "@store/authStore.ts";
 import {logout} from "@/api/auth.ts";
+import {useIsAuth} from "@/hooks/useIsAuth.ts";
 
 export default function Navbar() {
     return (
         <nav>
             <ul className={"flex gap-3"}>
+                <li>
+                    <Link to={"/"}>Streams</Link>
+                </li>
+
+                <li>
+                    <Link to={"/vods"}>VODs</Link>
+                </li>
+
                 {!useIsAuth() && (
                     <>
                         <li>
@@ -28,7 +36,6 @@ export default function Navbar() {
                             <span className={"cursor-pointer"} onClick={logout}>
                                 Logout
                             </span>
-                            {/*<Link onClick={logout}>Logout</Link>*/}
                         </li>
                     </>
                 )}

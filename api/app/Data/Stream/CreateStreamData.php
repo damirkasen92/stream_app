@@ -8,7 +8,6 @@ use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Attributes\Validation\Unique;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Optional;
 
 class CreateStreamData extends Data
 {
@@ -19,7 +18,7 @@ class CreateStreamData extends Data
         #[Required, Min(1), Max(255), Unique('streams', 'title')]
         public string $title,
 
-        public string|Optional $description,
+        public ?string $description = null,
     )
     {}
 

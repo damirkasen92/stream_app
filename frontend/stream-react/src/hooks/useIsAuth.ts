@@ -1,1 +1,3 @@
-// export const isAuth: boolean = !!useAuthStore.getState().accessToken;
+import {useAuthStore} from "@store/authStore.ts";
+
+export const useIsAuth = () => useAuthStore((state) => !!state.accessToken);

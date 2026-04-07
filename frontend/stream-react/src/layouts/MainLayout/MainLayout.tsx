@@ -9,17 +9,19 @@ export default function MainLayout() {
     return (
         <>
             <Header />
-            <div className={"container mx-auto mt-3 px-3"}>
-                <motion.main
-                    key={location.pathname}
-                    initial={{opacity: 0, y: 20}}
-                    animate={{opacity: 1, y: 0}}
-                    exit={{opacity: 0, y: -20}}
-                    transition={{duration: 0.3}}
-                    className={"flex flex-col h-full"}
-                >
-                    <Outlet />
-                </motion.main>
+            <div className={"overflow-y-auto mt-3 px-3 w-full"}>
+                <div className={"container mx-auto h-full"}>
+                    <motion.main
+                        key={location.pathname}
+                        initial={{opacity: 0, y: 20}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -20}}
+                        transition={{duration: 0.3}}
+                        className={"flex flex-col h-full"}
+                    >
+                        <Outlet />
+                    </motion.main>
+                </div>
             </div>
             <Footer />
         </>

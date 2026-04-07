@@ -33,5 +33,6 @@ ffmpeg -i rtmp://localhost:1935/$MTX_PATH \
     -c:v libx264 -b:v 2500k -s 1280x720 -c:a aac -b:a 128k \
     -f hls -hls_time 6 -hls_playlist_type event \
     ${PATH_720}
+#    -vf fps=1/30 -q:v 2 -update 1 "/recordings/${G1}/live_preview.jpg"
 
 exit 0

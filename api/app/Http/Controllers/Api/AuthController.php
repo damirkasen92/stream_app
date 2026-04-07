@@ -50,7 +50,7 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json([
                 'error' => 'Invalid refresh token'
-            ], Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $tokens = IssueTokens::execute($user);

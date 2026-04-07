@@ -18,11 +18,13 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
+        const {isLoggedOut} = useAuthStore.getState();
+
         if (error.response?.data?.errors) {
             return Promise.reject(error.response.data.errors);
         }
 
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 && !isLoggedOut) {
             try {
                 const newToken = await refresh();
                 error.config.headers["Authorization"] = `Bearer ${newToken}`;
